@@ -1,8 +1,8 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { shallow } from 'enzyme';
 import App from './App';
 
 test('renders app', () => {
-  const app  = render(<App />);
+  const app = shallow(<App />);
   expect(app).not.toBeNull();
 });
