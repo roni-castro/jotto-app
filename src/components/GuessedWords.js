@@ -1,25 +1,28 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Table, Tr } from 'styled-table-component';
 
 const GuessedWords = (props) => {
     return (
         <div test-id="component-guessed-words">
-            <h2>Guessed Words</h2>
             {props.guessedWords && props.guessedWords.length ? 
-                <table test-id='guessed-words'>
+            <>
+                <h2>Guessed Words</h2>
+                <Table theadDark md test-id='guessed-words'>
                     <thead>
                         <tr>
-                            <th>Guess</th>
-                            <th>Matching Letters</th>
+                            <th scope="col">Guess</th>
+                            <th scope="col">Matching Letters</th>
                         </tr>
                     </thead>
                     <tbody>
                         {props.guessedWords.map((item, index) => renderItems(item,index))}
                     </tbody>
-                </table>
-            : <div>
-                <span test-id='guessed-words-instructions'>Try a guess</span>
-              </div>
+                </Table>
+            </>
+            : <span test-id='guessed-words-instructions'>
+                Try to guess the secret word
+              </span>
             }
         </div>
     )
@@ -28,10 +31,10 @@ const GuessedWords = (props) => {
 const renderItems = (item, index) => {
     const { guessedWord, letterMatchCount } = item
     return (
-        <tr key={index.toString()} test-id='guessed-word'>
+        <Tr light key={index.toString()} test-id='guessed-word'>
             <td>{guessedWord}</td>
             <td>{letterMatchCount}</td>
-        </tr>
+        </Tr>
     )
 }
 
