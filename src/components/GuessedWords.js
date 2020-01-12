@@ -4,16 +4,21 @@ import PropTypes from 'prop-types';
 const GuessedWords = (props) => {
     return (
         <div test-id="component-guessed-words">
+            <h2>Guessed Words</h2>
             {props.guessedWords && props.guessedWords.length ? 
-                <table test-id='guessed-words-table'>
-                <tr>
-                    <th>Guess</th>
-                    <th>Matching Letters</th>
-                </tr>
-                    {props.guessedWords.map((item, index) => renderItems(item,index))}
+                <table test-id='guessed-words'>
+                    <thead>
+                        <tr>
+                            <th>Guess</th>
+                            <th>Matching Letters</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {props.guessedWords.map((item, index) => renderItems(item,index))}
+                    </tbody>
                 </table>
             : <div>
-                <span test-id='guessed-words-empty'>Try a guess</span>
+                <span test-id='guessed-words-instructions'>Try a guess</span>
               </div>
             }
         </div>
@@ -23,7 +28,7 @@ const GuessedWords = (props) => {
 const renderItems = (item, index) => {
     const { guessedWord, letterMatchCount } = item
     return (
-        <tr key={index.toString()} test-id='guessed-word-item'>
+        <tr key={index.toString()} test-id='guessed-word'>
             <td>{guessedWord}</td>
             <td>{letterMatchCount}</td>
         </tr>

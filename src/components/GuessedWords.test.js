@@ -20,20 +20,49 @@ test('renders GuessedWords component', () => {
     expect(app).not.toBeNull();
 });
 
-test('show list of values correctly', () => {
-    const app = setup();
-    const guessedWordsItems = findElementByTestId(app, 'guessed-word-item');
-    expect(guessedWordsItems.length).toBe(defaultGuessedWords.guessedWords.length);
-});
-
-test('show hint when no guess was made', () => {
-    const app = setup({ guessedWords: [] });
-    const guessedWordsHint = findElementByTestId(app, 'guessed-words-empty');
-    expect(guessedWordsHint.text()).not.toBeFalsy();
-});
-
 test('do not throw warning about expected props', () => {
     checkProps(GuessedWords, defaultGuessedWords)
 });
+
+describe('if there are more than zero guessed words', () => {
+    let wrapper;
+    beforeEach(() => {
+        wrapper = setup(defaultGuessedWords)
+    })
+
+    test('render component guessed words', () => {
+        const componentGuessedWords = findElementByTestId(wrapper, 'component-guessed-words');
+        expect(componentGuessedWords.length).toBe(1);
+    });
+
+    test('render "guessed word" section', () => {
+        const guessedWordsNode = findElementByTestId(wrapper, 'guessed-words');
+        expect(guessedWordsNode.length).toBe(1);
+    });
+
+    test('render list of guessed words according to its size', () => {
+        const guessedWordItem = findElementByTestId(wrapper, 'guessed-word');
+        expect(guessedWordItem.length).toBe(defaultGuessedWords.guessedWords.length);
+    });
+});
+
+describe('if there is zero guessed words', () => {
+    let wrapper;
+    beforeEach(() => {
+        wrapper = setup({ guessedWords: [] });
+    });
+
+    test('render component guessed words', () => {
+        const componentGuessedWords = findElementByTestId(wrapper, 'component-guessed-words');
+        expect(componentGuessedWords.length).toBe(1);
+    });
+
+    test('show instructions when no guess was made', () => {
+        const guessedWordsHint = findElementByTestId(wrapper, 'guessed-words-instructions');
+        expect(guessedWordsHint.text()).not.toBeFalsy();
+    });
+});
+
+
 
 
