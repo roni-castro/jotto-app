@@ -36,5 +36,5 @@ test('show no text message when success state is false', () => {
 test('do not throw warning with expected props', () => {
     const expectedProps = { success: false };
     checkProps(Congrats, expectedProps);
- });
+});
 
