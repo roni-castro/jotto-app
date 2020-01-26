@@ -1,6 +1,6 @@
-import { combineReducers } from 'redux';
+import { combineReducers } from 'redux'
 import sucessReducer from './sucessReducer'
 
-export default combineReducers(
+export default combineReducers({
   sucessReducer,
-)
+})
