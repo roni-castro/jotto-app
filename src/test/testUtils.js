@@ -1,6 +1,7 @@
 import { assertPropTypes } from 'check-prop-types';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import rootReducer from '../reducers'
+import { middlewares } from '../configureStore';
 
 export const findElementByTestId = (wrapper, id) => {
     return wrapper.find(`[test-id="${id}"]`);
@@ -11,5 +12,6 @@ export const checkProps = (component, expectedProps) => {
 }
 
 export const createStoreFactory = (initialState) => {
-    return createStore(rootReducer, initialState)
+    const createStoreWithMiddlewares = applyMiddleware(...middlewares)(createStore)
+    return createStoreWithMiddlewares(rootReducer, initialState)
 }
