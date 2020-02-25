@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 const InputStyled = styled.input`
     width: 15%;
@@ -9,8 +10,12 @@ const InputStyled = styled.input`
     border-radius: 4px;
 `
 
-export const Input = (props) => 
+export const Input = ({ secretWord }) => 
   <InputStyled
     autoFocus
     test-id="input"
   />
+
+Input.propTypes = {
+  secretWord: PropTypes.string.isRequired
+}
