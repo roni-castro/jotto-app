@@ -1,8 +1,15 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import App from './App';
+import { findElementByTestId } from './test/testUtils';
+
+const setup = () => {
+  return shallow(<App />)
+}
+
 
 test('renders app', () => {
-  const app = shallow(<App />);
-  expect(app).not.toBeNull();
+  const wrapper = setup();
+  const componentApp = findElementByTestId(wrapper, 'component-app')
+  expect(componentApp.length).toBe(1);
 });

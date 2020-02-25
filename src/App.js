@@ -5,7 +5,7 @@ import Congrats from './components/Congrats';
 
 function App() {
   return (
-    <div className="App">
+    <div className="App" test-id="component-app">
       <h1>Jotto</h1>
       <Congrats success={false}/>
       <GuessedWords 
