@@ -1,7 +1,9 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect } from 'react';
 import './App.css';
 import GuessedWords from './components/GuessedWords';
 import Congrats from './components/Congrats';
+import Spinner from './components/Spinner';
+import Loading from './components/Loading';
 import { getSecretWord } from './actions/hookActions';
 
 const secretWordReducer = (state, action) => {
@@ -14,7 +16,7 @@ const secretWordReducer = (state, action) => {
 }
 
 function App() {
-  const [state, dispatch] = useReducer(secretWordReducer, { secretWord: null })
+  const [state, dispatch] = React.useReducer(secretWordReducer, { secretWord: null })
 
   const setSecretWord = (secretWord) => {
     dispatch({ type: 'setSecretWord', payload: secretWord })
@@ -23,18 +25,23 @@ function App() {
   useEffect(() => {
     getSecretWord(setSecretWord)
   }, [])
-
   return (
-    <div className="App" test-id="component-app">
-      <h1>Jotto</h1>
-      <Congrats success={false}/>
-      <GuessedWords 
-        guessedWords={[
-            { guessedWord: 'train', letterMatchCount: 3 },
-            { guessedWord: 'agile', letterMatchCount: 1 },
-        ]}
-      />
-    </div>
+    state.secretWord ?
+      <div className="App" test-id="component-app">
+        <h1>Jotto</h1>
+        <Congrats success={false}/>
+        <GuessedWords 
+          guessedWords={[
+              { guessedWord: 'train', letterMatchCount: 3 },
+              { guessedWord: 'agile', letterMatchCount: 1 },
+          ]}
+        />
+      </div>
+    : 
+      <Loading test-id="spinner">
+        <Spinner />
+        <p>Loading...</p>
+      </Loading>
   );
 }
 

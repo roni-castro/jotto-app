@@ -5,7 +5,13 @@ import moxios from 'moxios'
 import { findElementByTestId } from './test/testUtils';
 import * as hookActions from './actions/hookActions';
 
-const setup = () => {
+const setup = (secretWord = 'party') => {
+  const mockUseReducer = jest.fn()
+    .mockReturnValue([
+      { secretWord },
+      jest.fn()
+    ])
+  React.useReducer = mockUseReducer
   return mount(<App />)
 }
 
@@ -15,6 +21,7 @@ beforeEach(() => {
 
 afterEach(() => {
   moxios.uninstall()
+  jest.clearAllMocks();
 })
 
 test('renders app', () => {
@@ -30,10 +37,6 @@ describe('getSecretWord called', () => {
     mockGetSecretWord = jest.fn()
     hookActions.getSecretWord = mockGetSecretWord
   })
-
-  afterEach(() => {
-    jest.clearAllMocks();
-  })
   
   test('getSecretWord is called on app render', () => {
     setup();
@@ -45,5 +48,39 @@ describe('getSecretWord called', () => {
     jest.clearAllMocks();
     wrapper.setProps({ secretWord: ''})
     expect(mockGetSecretWord).not.toHaveBeenCalled();
+  });
+})
+
+describe('secretWord is null', () => {
+  let wrapper
+  beforeEach(() => {
+    wrapper = setup(null);
+  })
+
+  test('render loading spinner when secretword is null', () => {
+    const spinner = findElementByTestId(wrapper, 'spinner')
+    expect(spinner.exists()).toBe(true)
+  });
+
+  test('do not render app component when secretword is null', () => {
+    const componentApp = findElementByTestId(wrapper, 'component-app')
+    expect(componentApp.exists()).toBe(false)
+  });
+})
+
+describe('secretWord is not null', () => {
+  let wrapper
+  beforeEach(() => {
+    wrapper = setup();
+  })
+
+  test('do not render loading spinner when secretword is not null', () => {
+    const spinner = findElementByTestId(wrapper, 'spinner')
+    expect(spinner.exists()).toBe(false)
+  });
+
+  test('render app component when secretword is not null', () => {
+    const componentApp = findElementByTestId(wrapper, 'component-app')
+    expect(componentApp.exists()).toBe(true)
   });
 })
