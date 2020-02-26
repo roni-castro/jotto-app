@@ -35,6 +35,12 @@ export const InputBox = ({ secretWord }) => {
       />
       <ButtonStyled 
         test-id="submit-button"
+        onClick={(event) => {
+          // TODO: Update guessedWords
+          // Check secretWord match with guess and update success
+          event.preventDefault()
+          setCurrentGuess('')}
+        }
       >Submit
       </ButtonStyled>
     </form>
