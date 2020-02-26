@@ -1,5 +1,5 @@
 import moxios from 'moxios'
-import getSecretWord from './hookAction'
+import { getSecretWord } from './hookActions'
 
 describe('hookAction test', () => {
   beforeEach(() => {
