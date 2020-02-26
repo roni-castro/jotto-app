@@ -5,6 +5,7 @@ import Congrats from './components/Congrats';
 import Spinner from './components/Spinner';
 import Loading from './components/Loading';
 import { getSecretWord } from './actions/hookActions';
+import { InputBox } from './components/InputBox';
 
 const secretWordReducer = (state, action) => {
   switch(action.type) {
@@ -30,6 +31,7 @@ function App() {
       <div className="App" test-id="component-app">
         <h1>Jotto</h1>
         <Congrats success={false}/>
+        <InputBox />
         <GuessedWords 
           guessedWords={[
               { guessedWord: 'train', letterMatchCount: 3 },
