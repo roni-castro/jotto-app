@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types'
 import styled from 'styled-components'; 
+import { getStringByLanguage } from '../helpers/strings';
+import languageContext from '../contexts/languageContext';
 
 const Congrats = styled.div`
     padding: 20px;
@@ -12,11 +14,12 @@ const Congrats = styled.div`
 `
 
 const CongratsStyled = (props) => {
+    const language = useContext(languageContext)
     const { success } = props;
     return (
         success ?
             <Congrats test-id='component-congrats'>
-                <span test-id='congrats-message'>Congratulations!! You guessed the word!</span>
+                <span test-id='congrats-message'>{getStringByLanguage(language, 'congrats')}</span>
             </Congrats>
         :
             <div test-id='component-congrats' />

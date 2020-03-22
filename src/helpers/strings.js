@@ -1,4 +1,4 @@
-const languageStrings = {
+export const languageStrings = {
   en: {
    congrats: 'Congratulations! You guessed the word!',
    submit: 'Submit',
