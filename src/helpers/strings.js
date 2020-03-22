@@ -19,10 +19,10 @@ const languageStrings = {
   }
 }
 
-const getStringByLanguage = () => {
-
-}
-
-export default {
-  getStringByLanguage,
+export const getStringByLanguage = (language, key, strings = languageStrings) => {
+  if (!strings[language] || !strings[language][key]) {
+    console.log(`Could not get string [${key}] for [${language}]`)
+    return languageStrings.en[key]
+  }
+  return strings[language][key]
 }

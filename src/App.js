@@ -31,7 +31,7 @@ function App() {
       <div className="App" test-id="component-app">
         <h1>Jotto</h1>
         <Congrats success={false}/>
-        <InputBox />
+        <InputBox secretWord={state.secretWord} />
         <GuessedWords 
           guessedWords={[
               { guessedWord: 'train', letterMatchCount: 3 },
