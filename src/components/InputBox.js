@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import { getStringByLanguage } from '../helpers/strings';
+import languageContext from '../contexts/languageContext'
 
 const InputStyled = styled.input`
     height: 28px;
@@ -22,13 +24,14 @@ const ButtonStyled = styled.button`
 
 export const InputBox = ({ secretWord }) => {
   const [currentGuess, setCurrentGuess] = useState('')
+  const language = useContext(languageContext)
 
   return (
     <form test-id="input-box">
       <InputStyled
         autoFocus
         test-id="input"
-        placeholder="Enter guess"
+        placeholder={getStringByLanguage(language, 'guessInputPlaceholder')}
         value={currentGuess}
         onChange={(event) => setCurrentGuess(event.target.value)}
       />
@@ -40,7 +43,8 @@ export const InputBox = ({ secretWord }) => {
           event.preventDefault()
           setCurrentGuess('')}
         }
-      >Submit
+      >
+        {getStringByLanguage(language, 'submit')}
       </ButtonStyled>
     </form>
   )
