@@ -1,7 +1,8 @@
 import { shallow } from 'enzyme';
-import React from 'react';
+import * as React from 'react';
 import { findElementByTestId, checkProps } from '../test/testUtils';
 import GuessedWords from './GuessedWords';
+import { languageStrings } from '../helpers/strings';
 
 const defaultGuessedWords = {
     guessedWords: [
@@ -61,8 +62,24 @@ describe('if there is zero guessed words', () => {
         const guessedWordsHint = findElementByTestId(wrapper, 'guessed-words-instructions');
         expect(guessedWordsHint.text()).not.toBeFalsy();
     });
-});
 
+    describe('language picker', () => {
+        
+        test('show instructions in english by default', () => {
+            const guessedWordsHint = findElementByTestId(wrapper, 'guessed-words-instructions');
+            expect(guessedWordsHint.text()).toBe(languageStrings.en.guessPrompt);
+        })
 
+        test('show instructions in emoji', () => {
+            const mockUseContextValue = jest.fn().mockReturnValue('emoji')
+            jest.spyOn(React, 'useContext').mockImplementation(mockUseContextValue)
+
+            wrapper = setup({ guessedWords: [] });
+            const guessedWordsHint = findElementByTestId(wrapper, 'guessed-words-instructions');
+            
+            expect(guessedWordsHint.text()).toBe(languageStrings.emoji.guessPrompt);
+        })
+    });
+})
 
 
