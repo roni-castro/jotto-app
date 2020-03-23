@@ -5,10 +5,10 @@ import moxios from 'moxios'
 import { findElementByTestId } from './test/testUtils';
 import * as hookActions from './actions/hookActions';
 
-const setup = (secretWord = 'party') => {
+const setup = (secretWord = 'party', language = 'en') => {
   const mockUseReducer = jest.fn()
     .mockReturnValue([
-      { secretWord },
+      { secretWord, language },
       jest.fn()
     ])
   React.useReducer = mockUseReducer
