@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
-import PropTypes from 'prop-types'
-import styled from 'styled-components'; 
+import styled from 'styled-components';
 import { getStringByLanguage } from '../helpers/strings';
 import languageContext from '../contexts/languageContext';
+import successContext from '../contexts/successContext';
 
 const Congrats = styled.div`
     padding: 20px;
@@ -13,22 +13,18 @@ const Congrats = styled.div`
     border-radius: 8px;
 `
 
-const CongratsStyled = (props) => {
-    const language = useContext(languageContext)
-    const { success } = props;
-    return (
-        success ?
-            <Congrats test-id='component-congrats'>
-                <span test-id='congrats-message'>{getStringByLanguage(language, 'congrats')}</span>
-            </Congrats>
-        :
-            <div test-id='component-congrats' />
+const CongratsStyled = () => {
+  const language = useContext(languageContext)
+  const [success] = successContext.useSuccess();
+  return (
+    success ?
+      <Congrats test-id='component-congrats'>
+        <span test-id='congrats-message'>{getStringByLanguage(language, 'congrats')}</span>
+      </Congrats>
+      :
+      <div test-id='component-congrats' />
 
-    )
-}
-
-CongratsStyled.propTypes = {
-    success: PropTypes.bool.isRequired
+  )
 }
 
 export default CongratsStyled;
