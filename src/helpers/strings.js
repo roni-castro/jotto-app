@@ -19,7 +19,7 @@ export const languageStrings = {
   }
 }
 
-export const getStringByLanguage = (language, key, strings = languageStrings) => {
+export const t = (language, key, strings = languageStrings) => {
   if (!strings[language] || !strings[language][key]) {
     console.log(`Could not get string [${key}] for [${language}]`)
     return languageStrings.en[key]

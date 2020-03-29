@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import { getStringByLanguage } from '../helpers/strings';
+import { t } from '../helpers/strings';
 import languageContext from '../contexts/languageContext'
 
 const InputStyled = styled.input`
@@ -31,7 +31,7 @@ export const InputBox = ({ secretWord }) => {
       <InputStyled
         autoFocus
         test-id="input"
-        placeholder={getStringByLanguage(language, 'guessInputPlaceholder')}
+        placeholder={t(language, 'guessInputPlaceholder')}
         value={currentGuess}
         onChange={(event) => setCurrentGuess(event.target.value)}
       />
@@ -44,7 +44,7 @@ export const InputBox = ({ secretWord }) => {
           setCurrentGuess('')}
         }
       >
-        {getStringByLanguage(language, 'submit')}
+        {t(language, 'submit')}
       </ButtonStyled>
     </form>
   )

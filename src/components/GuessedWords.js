@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Table, Tr } from 'styled-table-component';
 import languageContext from '../contexts/languageContext';
-import { getStringByLanguage } from '../helpers/strings';
+import { t } from '../helpers/strings';
 
 const GuessedWords = (props) => {
   const lang = useContext(languageContext)
@@ -10,12 +10,12 @@ const GuessedWords = (props) => {
     <div test-id="component-guessed-words">
       {props.guessedWords && props.guessedWords.length ?
         <>
-          <h2>{getStringByLanguage(lang, 'guessColumnHeader')}</h2>
+          <h2>{t(lang, 'guessColumnHeader')}</h2>
           <Table theadDark md test-id='guessed-words'>
             <thead>
               <tr>
-                <th scope="col">{getStringByLanguage(lang, 'guessedWords')}</th>
-                <th scope="col">{getStringByLanguage(lang, 'matchingLettersColumnHeader')}</th>
+                <th scope="col">{t(lang, 'guessedWords')}</th>
+                <th scope="col">{t(lang, 'matchingLettersColumnHeader')}</th>
               </tr>
             </thead>
             <tbody>
@@ -24,7 +24,7 @@ const GuessedWords = (props) => {
           </Table>
         </>
         : <span test-id='guessed-words-instructions'>
-          {getStringByLanguage(lang, 'guessPrompt')}
+          {t(lang, 'guessPrompt')}
         </span>
       }
     </div>

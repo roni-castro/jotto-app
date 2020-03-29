@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
-import { getStringByLanguage } from '../helpers/strings';
+import { t } from '../helpers/strings';
 import languageContext from '../contexts/languageContext';
 import successContext from '../contexts/successContext';
 
@@ -19,7 +19,7 @@ const CongratsStyled = () => {
   return (
     success ?
       <Congrats test-id='component-congrats'>
-        <span test-id='congrats-message'>{getStringByLanguage(language, 'congrats')}</span>
+        <span test-id='congrats-message'>{t(language, 'congrats')}</span>
       </Congrats>
       :
       <div test-id='component-congrats' />
