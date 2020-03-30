@@ -1,25 +1,24 @@
 import * as React from 'react';
-import { shallow, mount } from 'enzyme';
+import { mount } from 'enzyme';
 import { InputBox } from "./InputBox"
-import { findElementByTestId, findStyledElementByTestId, checkProps } from "../test/testUtils"
+import { findElementByTestId, checkProps } from "../test/testUtils"
 import languageContext from '../contexts/languageContext';
+import guessedWordsContext from '../contexts/guessedWordsContext';
 import { languageStrings } from '../helpers/strings';
-
-const setup = (props = {}) => {
-  return shallow(<InputBox {...props} />)
-}
 
 const setupWithMount = (props = {}, language = 'en') => {
   return mount(
     <languageContext.Provider value={language}>
-      <InputBox {...props} />
+      <guessedWordsContext.Provider value={[[], jest.fn()]}>
+        <InputBox {...props} />
+      </guessedWordsContext.Provider>
     </languageContext.Provider>
   )
 }
 
 describe('test InputBox component', () => {
   test('Input is rendered correctly', () => {
-    const wrapper = setup({ secretWord: 'party' })
+    const wrapper = setupWithMount({ secretWord: 'party' })
     const inputBox = findElementByTestId(wrapper, 'input')
     expect(inputBox.length).toBe(1)
   })
@@ -35,7 +34,7 @@ describe('test InputBox component', () => {
 
     let wrapper, input;
     beforeEach(() => {
-      wrapper = setup({ secretWord: 'party' })
+      wrapper = setupWithMount({ secretWord: 'party' })
       input = findElementByTestId(wrapper, 'input')
     })
 
@@ -60,17 +59,18 @@ describe('test InputBox component', () => {
       submitButton.simulate('click', { preventDefault: () => { } })
 
       expect(setCurrentGuess).toHaveBeenCalledWith('');
+      // expect(setGuessWords).toHaveBeenCalledWith('');
     })
 
     test('input submit button text is in english', () => {
       wrapper = setupWithMount({ secretWord: 'party' }, 'en')
-      const submitButton = findStyledElementByTestId(wrapper, 'submit-button')
+      const submitButton = findElementByTestId(wrapper, 'submit-button')
       expect(submitButton.text()).toBe(languageStrings.en.submit);
     })
 
     test('input submit button text is in emoji', () => {
       wrapper = setupWithMount({ secretWord: 'party' }, 'emoji')
-      const submitButton = findStyledElementByTestId(wrapper, 'submit-button')
+      const submitButton = findElementByTestId(wrapper, 'submit-button')
       expect(submitButton.text()).toBe(languageStrings.emoji.submit);
     })
   })

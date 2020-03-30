@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { t } from '../helpers/strings';
 import languageContext from '../contexts/languageContext'
+import guessedWordsContext from '../contexts/guessedWordsContext'
+import getLetterMatchCount from '../utils/LetterMatch';
 
 const InputStyled = styled.input`
     height: 28px;
@@ -25,6 +27,7 @@ const ButtonStyled = styled.button`
 export const InputBox = ({ secretWord }) => {
   const [currentGuess, setCurrentGuess] = useState('')
   const language = useContext(languageContext)
+  const [guessedWords, setGuessedWords] = guessedWordsContext.useGuessedWords()
 
   return (
     <form test-id="input-box">
@@ -38,7 +41,11 @@ export const InputBox = ({ secretWord }) => {
       <ButtonStyled 
         test-id="submit-button"
         onClick={(event) => {
-          // TODO: Update guessedWords
+          // Update guessedWords
+          const letterMatchCount = getLetterMatchCount(currentGuess, secretWord);
+          const newGuessedWords = [...guessedWords, { guessedWord: currentGuess, letterMatchCount }];
+          setGuessedWords(newGuessedWords);
+
           // Check secretWord match with guess and update success
           event.preventDefault()
           setCurrentGuess('')}
