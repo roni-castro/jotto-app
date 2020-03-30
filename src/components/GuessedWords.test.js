@@ -80,7 +80,7 @@ describe('if there is zero guessed words', () => {
 
       expect(guessedWordsHint.text()).toBe(languageStrings.emoji.guessPrompt);
     })
-  });
+  })
 })
 
 

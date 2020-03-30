@@ -1,53 +1,90 @@
-import * as React from 'react';
 import { mount } from 'enzyme';
-import { findElementByTestId } from "../test/testUtils"
-import { InputBox } from './InputBox';
-import languageContext from '../contexts/languageContext';
+import * as React from 'react';
 import guessedWordsContext from '../contexts/guessedWordsContext';
-import { languageStrings } from '../helpers/strings';
 import successContext from '../contexts/successContext';
+import { findElementByTestId } from "../test/testUtils";
+import { InputBox } from './InputBox';
+import GuessedWords from './GuessedWords';
 
-const setup = ({ secretWord, success } = {}) => {
+const setup = ({ secretWord, success, guessedWords } = {}) => {
+  guessedWords = guessedWords || []
   success = success || false
   const wrapper = mount(
     <guessedWordsContext.Provider>
       <successContext.SuccessProvider>
         <InputBox secretWord={secretWord} />
+        <GuessedWords />
       </successContext.SuccessProvider>
     </guessedWordsContext.Provider>
   )
   const input = findElementByTestId(wrapper, 'input')
   const submitButton = findElementByTestId(wrapper, 'submit-button')
+
+  guessedWords.forEach(guessedWord => {
+    const mockEvent = { target: { value: guessedWord } }
+    input.simulate('change', mockEvent)
+    submitButton.simulate('click')
+  })
   return [wrapper, input, submitButton]
 }
 
 describe('test word guesses', () => {
-  let wrapper, input, submitButton
-  beforeEach(() => {
-    [wrapper, input, submitButton] = setup({ secretWord: 'party' })
+  describe('Non empty guessedWords', () => {
+    let wrapper, input, submitButton
+    const guessedWords = ['mark']
+    beforeEach(() => {
+      [wrapper, input, submitButton] = setup({ guessedWords, secretWord: 'party' })
+    })
+
+    describe('correct guess', () => {
+      beforeEach(() => {
+        const mockEvent = { target: { value: 'party' } }
+        input.simulate('change', mockEvent)
+        submitButton.simulate('click')
+      })
+      test('input is not rendered', () => {
+        const inputBox = findElementByTestId(wrapper, 'input-box')
+        expect(inputBox.children().length).toBe(0)
+      })
+
+      test('table have rows number according to the guesses made', () => {
+        const guessedWordsElements = findElementByTestId(wrapper, 'guessed-word')
+        expect(guessedWordsElements.length).toBe(2)
+      })
+    })
+
+    describe('incorrect guess', () => {
+      beforeEach(() => {
+        const mockEvent = { target: { value: 'train' } }
+        input.simulate('change', mockEvent)
+        submitButton.simulate('click')
+      })
+      test('input is rendered', () => {
+        const inputBox = findElementByTestId(wrapper, 'input-box')
+        expect(inputBox.exists()).toBe(true)
+      })
+      test('table have rows number according to the guesses made', () => {
+        const guessedWordsElements = findElementByTestId(wrapper, 'guessed-word')
+        expect(guessedWordsElements.length).toBe(2)
+      })
+    })
   })
 
-  describe('correct guess', () => {
+  describe('Empty guessedWords', () => {
+    let wrapper, input, submitButton
     beforeEach(() => {
-      const mockEvent = { target: { value: 'party' } }
-      input.simulate('change', mockEvent)
-      submitButton.simulate('click')
+      [wrapper, input, submitButton] = setup({ guessedWords: [], secretWord: 'party' })
     })
-    test('input is not rendered', () => {
-      const inputBox = findElementByTestId(wrapper, 'input-box')
-      expect(inputBox.children().length).toBe(0)
-    })
-  })
+    
+    describe('guessedWords shows correct guesses after incorrect guess', () => {
+      test('', () => {
+        const mockEvent = { target: { value: 'wrong' } }
+        input.simulate('change', mockEvent)
+        submitButton.simulate('click')
 
-  describe('incorrect guess', () => {
-    beforeEach(() => {
-      const mockEvent = { target: { value: 'train' } }
-      input.simulate('change', mockEvent)
-      submitButton.simulate('click')
-    })
-    test('input is rendered', () => {
-      const inputBox = findElementByTestId(wrapper, 'input-box')
-      expect(inputBox.exists()).toBe(true)
+        const guessedWordsElements = findElementByTestId(wrapper, 'guessed-word')
+        expect(guessedWordsElements.length).toBe(1)
+      })
     })
   })
 })
