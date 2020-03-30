@@ -54,6 +54,9 @@ export const InputBox = ({ secretWord }) => {
           setGuessedWords(newGuessedWords);
 
           // Check secretWord match with guess and update success
+          if (currentGuess === secretWord) {
+            setSuccess(true);
+          }
           event.preventDefault()
           setCurrentGuess('')
         }
