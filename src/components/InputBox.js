@@ -37,7 +37,6 @@ export const InputBox = ({ secretWord }) => {
 
   return (
     <form test-id="input-box">
-      <div>{secretWord}</div>
       <InputStyled
         autoFocus
         test-id="input"

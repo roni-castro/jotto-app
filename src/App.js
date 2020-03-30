@@ -41,6 +41,7 @@ function App() {
     state.secretWord ?
       <div className="App" test-id="component-app">
         <h1>Jotto</h1>
+        <h3>{`The secret word is: ${state.secretWord}`}</h3>
         <LanguageContext.Provider
           value={state.language}
         >
