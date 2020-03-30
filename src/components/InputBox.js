@@ -5,6 +5,7 @@ import { t } from '../helpers/strings';
 import languageContext from '../contexts/languageContext'
 import guessedWordsContext from '../contexts/guessedWordsContext'
 import getLetterMatchCount from '../utils/LetterMatch';
+import successContext from '../contexts/successContext';
 
 const InputStyled = styled.input`
     height: 28px;
@@ -27,10 +28,16 @@ const ButtonStyled = styled.button`
 export const InputBox = ({ secretWord }) => {
   const [currentGuess, setCurrentGuess] = useState('')
   const language = useContext(languageContext)
+  const [success, setSuccess] = successContext.useSuccess()
   const [guessedWords, setGuessedWords] = guessedWordsContext.useGuessedWords()
+
+  if (success) {
+    return null
+  }
 
   return (
     <form test-id="input-box">
+      <div>{secretWord}</div>
       <InputStyled
         autoFocus
         test-id="input"
@@ -38,7 +45,7 @@ export const InputBox = ({ secretWord }) => {
         value={currentGuess}
         onChange={(event) => setCurrentGuess(event.target.value)}
       />
-      <ButtonStyled 
+      <ButtonStyled
         test-id="submit-button"
         onClick={(event) => {
           // Update guessedWords
@@ -48,7 +55,8 @@ export const InputBox = ({ secretWord }) => {
 
           // Check secretWord match with guess and update success
           event.preventDefault()
-          setCurrentGuess('')}
+          setCurrentGuess('')
+        }
         }
       >
         {t(language, 'submit')}

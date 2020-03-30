@@ -5,20 +5,26 @@ import { findElementByTestId, checkProps } from "../test/testUtils"
 import languageContext from '../contexts/languageContext';
 import guessedWordsContext from '../contexts/guessedWordsContext';
 import { languageStrings } from '../helpers/strings';
+import successContext from '../contexts/successContext';
 
-const setupWithMount = (props = {}, language = 'en') => {
+const setupWithMount = ({ secretWord, language, success } = {}) => {
+  secretWord = secretWord || 'party'
+  language = language || 'en'
+  success = success || false
   return mount(
     <languageContext.Provider value={language}>
-      <guessedWordsContext.Provider value={[[], jest.fn()]}>
-        <InputBox {...props} />
-      </guessedWordsContext.Provider>
+      <successContext.SuccessProvider value={[success, jest.fn()]}>
+        <guessedWordsContext.Provider value={[[], jest.fn()]}>
+          <InputBox secretWord={secretWord} />
+        </guessedWordsContext.Provider>
+      </successContext.SuccessProvider>
     </languageContext.Provider>
   )
 }
 
 describe('test InputBox component', () => {
   test('Input is rendered correctly', () => {
-    const wrapper = setupWithMount({ secretWord: 'party' })
+    const wrapper = setupWithMount()
     const inputBox = findElementByTestId(wrapper, 'input')
     expect(inputBox.length).toBe(1)
   })
@@ -34,7 +40,7 @@ describe('test InputBox component', () => {
 
     let wrapper, input;
     beforeEach(() => {
-      wrapper = setupWithMount({ secretWord: 'party' })
+      wrapper = setupWithMount()
       input = findElementByTestId(wrapper, 'input')
     })
 
@@ -50,6 +56,14 @@ describe('test InputBox component', () => {
       expect(setCurrentGuess).toHaveBeenCalledTimes(1);
     })
 
+    test('setSuccess is called when secretWord match', () => {
+      const submitButton = findElementByTestId(wrapper, 'submit-button')
+      const mockEvent = { target: { value: 'party' } }
+      input.simulate('change', mockEvent)
+      submitButton.simulate('click', { preventDefault: () => { } })
+
+    })
+
     test('currentGuess is set to empty when submit button is clicked', () => {
       const submitButton = findElementByTestId(wrapper, 'submit-button')
       // simulate insert input value
@@ -59,20 +73,24 @@ describe('test InputBox component', () => {
       submitButton.simulate('click', { preventDefault: () => { } })
 
       expect(setCurrentGuess).toHaveBeenCalledWith('');
-      // expect(setGuessWords).toHaveBeenCalledWith('');
     })
 
     test('input submit button text is in english', () => {
-      wrapper = setupWithMount({ secretWord: 'party' }, 'en')
+      wrapper = setupWithMount()
       const submitButton = findElementByTestId(wrapper, 'submit-button')
       expect(submitButton.text()).toBe(languageStrings.en.submit);
     })
 
     test('input submit button text is in emoji', () => {
-      wrapper = setupWithMount({ secretWord: 'party' }, 'emoji')
+      wrapper = setupWithMount({ language: 'emoji' })
       const submitButton = findElementByTestId(wrapper, 'submit-button')
       expect(submitButton.text()).toBe(languageStrings.emoji.submit);
     })
   })
-
+  describe('test input visibility', () => {
+    test('input is not rendered when success is true', () => {
+      const wrapper = setupWithMount({ success: true })
+      expect(wrapper.isEmptyRender()).toBe(true)
+    })
+  })
 })
