@@ -1,25 +1,27 @@
 import React, { useContext } from 'react';
-import PropTypes from 'prop-types';
 import { Table, Tr } from 'styled-table-component';
 import languageContext from '../contexts/languageContext';
+import guessedWordsContext from '../contexts/guessedWordsContext';
 import { t } from '../helpers/strings';
 
-const GuessedWords = (props) => {
+const GuessedWords = () => {
   const lang = useContext(languageContext)
+  const [guessedWords] = guessedWordsContext.useGuessedWords()
+
   return (
     <div test-id="component-guessed-words">
-      {props.guessedWords && props.guessedWords.length ?
+      {guessedWords && guessedWords.length ?
         <>
           <h2>{t(lang, 'guessColumnHeader')}</h2>
-          <Table theadDark md test-id='guessed-words'>
-            <thead>
+          <Table theadDark md >
+            <thead test-id='guessed-words'>
               <tr>
                 <th scope="col">{t(lang, 'guessedWords')}</th>
                 <th scope="col">{t(lang, 'matchingLettersColumnHeader')}</th>
               </tr>
             </thead>
             <tbody>
-              {props.guessedWords.map((item, index) => renderItems(item, index))}
+              {guessedWords.map((item, index) => renderItems(item, index))}
             </tbody>
           </Table>
         </>
@@ -39,15 +41,6 @@ const renderItems = (item, index) => {
       <td>{letterMatchCount}</td>
     </Tr>
   )
-}
-
-GuessedWords.propTypes = {
-  guessedWords: PropTypes.arrayOf(
-    PropTypes.shape({
-      guessedWord: PropTypes.string.isRequired,
-      letterMatchCount: PropTypes.number.isRequired,
-    })
-  ).isRequired,
 }
 
 export default GuessedWords;
